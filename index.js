@@ -7,8 +7,6 @@ const {
 const express = require("express");
 const puppeteer = require("puppeteer");
 const fs = require("fs");
-const sanitizeHtml = require("sanitize-html");
-const config = require("./config.json");
 const app = express();
 require("dotenv").config();
 
@@ -85,7 +83,7 @@ async function robuxGenerator(msg, content) {
   const robuxSecondRes = content[1]?.replaceAll("\n", "<br>");
 
   await page.goto(
-    `https://discord-robux-proof-bot.vercel.app/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
+    `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
   );
   // await page.goto(
   //   `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
@@ -120,7 +118,7 @@ client.on(Events.MessageCreate, async (msg) => {
   if (msg.channel.type === "dm" || msg.author.bot) return;
 
   const content = msg.content
-    .slice(config.prefix.length)
+    .slice(1)
     .trim()
     .split("-")
     .map((c) => c.trim());
