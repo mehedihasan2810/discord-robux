@@ -28,6 +28,9 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.send("server is running");
 });
+app.get("/foo", (req, res) => {
+  res.send("hellooooooo");
+});
 app.get("/file", (req, res) => {
   res.sendFile(`${__dirname}/robux.html`);
 });
@@ -116,16 +119,17 @@ client.once(Events.ClientReady, (c) => {
 client.on(Events.MessageCreate, async (msg) => {
   if (msg.channel.type === "dm" || msg.author.bot) return;
 
-  const content = msg.content
-    .slice(config.prefix.length)
-    .trim()
-    .split("-")
-    .map((c) => c.trim());
+  // const content = msg.content
+  //   .slice(config.prefix.length)
+  //   .trim()
+  //   .split("-")
+  //   .map((c) => c.trim());
 
-  const command = content.shift().toLowerCase();
-  if (command === "robux") {
-    await robuxGenerator(msg, content);
-  }
+  // const command = content.shift().toLowerCase();
+  // if (command === "robux") {
+  //   await robuxGenerator(msg, content);
+  // }
+  await msg.channel.send({ content: `foooooo`});
 });
 
 app.listen(port, () => {
@@ -133,3 +137,5 @@ app.listen(port, () => {
 });
 
 client.login(process.env.TOKEN);
+
+module.exports = app;
