@@ -119,17 +119,16 @@ client.once(Events.ClientReady, (c) => {
 client.on(Events.MessageCreate, async (msg) => {
   if (msg.channel.type === "dm" || msg.author.bot) return;
 
-  // const content = msg.content
-  //   .slice(config.prefix.length)
-  //   .trim()
-  //   .split("-")
-  //   .map((c) => c.trim());
+  const content = msg.content
+    .slice(config.prefix.length)
+    .trim()
+    .split("-")
+    .map((c) => c.trim());
 
-  // const command = content.shift().toLowerCase();
-  // if (command === "robux") {
-  //   await robuxGenerator(msg, content);
-  // }
-  await msg.channel.send({ content: `foooooo`});
+  const command = content.shift().toLowerCase();
+  if (command === "robux") {
+    await robuxGenerator(msg, content);
+  }
 });
 
 app.listen(port, () => {
