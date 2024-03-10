@@ -58,11 +58,18 @@ app.get("/robux", (req, res) => {
 });
 
 function generateTime(t) {
-  const date = new Date(t);
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  const time = `${hours}:${minutes}`;
+  // const date = new Date(t);
+  // const hours = date.getHours().toString().padStart(2, "0");
+  // const minutes = date.getMinutes().toString().padStart(2, "0");
+  // const time = `${hours}:${minutes}`;
 
+  // return time;
+
+  const date = new Date(t);
+  const hours = date.getUTCHours().toString().padStart(2, "0");
+  const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+  const time = `${hours}:${minutes}`;
+  console.log(time);
   return time;
 }
 
@@ -106,13 +113,13 @@ async function robuxGenerator(msg, content) {
     const firstAuthorTime = generateTime(msg.createdTimestamp + 120000);
     const secondAuthorSecondTime = generateTime(msg.createdTimestamp + 240000);
 
-    await page.goto(
-      `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
-    );
-    
     // await page.goto(
-    //   `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
+    //   `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
     // );
+
+    await page.goto(
+      `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
+    );
 
     await page.waitForSelector(".scrollerInner-2YIMLh");
 
@@ -134,9 +141,9 @@ async function robuxGenerator(msg, content) {
 
 // function formatAMPM(msg) {
 //   var t = msg.getHours(),
-//     a = msg.getMinutes(),
-//     n = t >= 12 ? "PM" : "AM";
-//   return (t = (t %= 12) || 12) + ":" + (a = a < 10 ? "0" + a : a) + " " + n;
+//     a = msg.getMinutes();
+//   // n = t >= 12 ? "PM" : "AM";
+//   return (t = (t %= 12) || 12) + ":" + (a = a < 10 ? "0" + a : a);
 // }
 
 client.once(Events.ClientReady, (c) => {
@@ -145,6 +152,9 @@ client.once(Events.ClientReady, (c) => {
 
 client.on(Events.MessageCreate, async (msg) => {
   if (msg.channel.type === "dm" || msg.author.bot) return;
+
+  console.log(msg.createdAt);
+  // console.log(msg)
 
   const content = msg.content
     .slice(1)
