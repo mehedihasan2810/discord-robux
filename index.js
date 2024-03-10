@@ -113,13 +113,15 @@ async function robuxGenerator(msg, content) {
     const firstAuthorTime = generateTime(msg.createdTimestamp + 120000);
     const secondAuthorSecondTime = generateTime(msg.createdTimestamp + 240000);
 
-    // await page.goto(
-    //   `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
-    // );
-
-    await page.goto(
-      `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
-    );
+    if (process.env.NODE_ENV === "development") {
+      await page.goto(
+        `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
+      );
+    } else {
+      await page.goto(
+        `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}&secondAuthorFirstTime=${secondAuthorFirstTime}&firstAuthorTime=${firstAuthorTime}&secondAuthorSecondTime=${secondAuthorSecondTime}`
+      );
+    }
 
     await page.waitForSelector(".scrollerInner-2YIMLh");
 
@@ -154,7 +156,7 @@ client.on(Events.MessageCreate, async (msg) => {
   if (msg.channel.type === "dm" || msg.author.bot) return;
 
   console.log(msg.createdAt);
-  // console.log(msg)
+  console.log(msg);
 
   const content = msg.content
     .slice(1)

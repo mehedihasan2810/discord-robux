@@ -15,6 +15,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "mime": "^4.0.1",
+    "moment-timezone": "^0.5.45",
     "node-html-to-image": "^4.0.0",
     "puppeteer": "^22.3.0",
     "sanitize-html": "^2.12.1"
