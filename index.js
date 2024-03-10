@@ -7,6 +7,7 @@ const {
 const express = require("express");
 const puppeteer = require("puppeteer");
 const fs = require("fs");
+const moment = require("moment");
 const app = express();
 require("dotenv").config();
 
@@ -109,9 +110,16 @@ async function robuxGenerator(msg, content) {
 
     const robuxSecondRes = content[1]?.replaceAll("\n", "<br>");
 
-    const secondAuthorFirstTime = generateTime(msg.createdTimestamp);
-    const firstAuthorTime = generateTime(msg.createdTimestamp + 120000);
-    const secondAuthorSecondTime = generateTime(msg.createdTimestamp + 240000);
+    const secondAuthorFirstTime = moment(msg.createdTimestamp).format("hh:mm");
+    const firstAuthorTime = moment(msg.createdTimestamp + 120000).format(
+      "hh:mm"
+    );
+    const secondAuthorSecondTime = moment(msg.createdTimestamp + 240000).format(
+      "hh:mm"
+    );
+    // const secondAuthorFirstTime = generateTime(msg.createdTimestamp);
+    // const firstAuthorTime = generateTime(msg.createdTimestamp + 120000);
+    // const secondAuthorSecondTime = generateTime(msg.createdTimestamp + 240000);
 
     if (process.env.NODE_ENV === "development") {
       await page.goto(
@@ -156,7 +164,8 @@ client.on(Events.MessageCreate, async (msg) => {
   if (msg.channel.type === "dm" || msg.author.bot) return;
 
   console.log(msg.createdAt);
-  console.log(msg);
+  // console.log(msg);
+  console.log(moment(msg.createdTimestamp + 120000).format("hh:mm"));
 
   const content = msg.content
     .slice(1)
