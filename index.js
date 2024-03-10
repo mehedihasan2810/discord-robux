@@ -86,9 +86,7 @@ async function robuxGenerator(msg, content) {
     const secondAuthorRes = content[0]?.replaceAll("\n", "<br>");
 
     const robuxSecondRes = content[1]?.replaceAll("\n", "<br>");
-    console.log(
-      `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
-    );
+
     await page.goto(
       `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
     );
