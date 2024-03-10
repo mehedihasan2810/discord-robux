@@ -21,16 +21,8 @@ const client = new Client({
   ],
 });
 
-app.use(express.static("public"));
-
 app.get("/", (req, res) => {
   res.send("server is running");
-});
-app.get("/foo", (req, res) => {
-  res.send("hellooooooo");
-});
-app.get("/file", (req, res) => {
-  res.sendFile(`${__dirname}/robux.html`);
 });
 
 app.get("/robux", (req, res) => {
