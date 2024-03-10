@@ -74,33 +74,52 @@ async function robuxGenerator(msg, content) {
   const authorURL = msg.author.displayAvatarURL();
   const secondUserAvatar = getRandomAvatar(msg);
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  const secondAuthor = content.shift();
-  const secondAuthorRes = content[0]?.replaceAll("\n", "<br>");
-
-  const robuxSecondRes = content[1]?.replaceAll("\n", "<br>");
-
-  await page.goto(
-    `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
-  );
-  // await page.goto(
-  //   `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
-  // );
-
-  await page.waitForSelector(".scrollerInner-2YIMLh");
-
-  const scrollerInner = await page.$(".scrollerInner-2YIMLh");
-
-  const screenshot = await scrollerInner.screenshot({ type: "png" });
-  await browser.close();
-
-  const file = new AttachmentBuilder(screenshot, {
-    name: `robuxProof-${Math.floor(Math.random() * 1000)}.png`,
+  const browser = await puppeteer.launch({
+    args: [
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--single-process",
+      "--no-zygote",
+    ],
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
   });
 
-  await msg.channel.send({ content: `${msg.author}`, files: [file] });
+  try {
+    const page = await browser.newPage();
+
+    const secondAuthor = content.shift();
+    const secondAuthorRes = content[0]?.replaceAll("\n", "<br>");
+
+    const robuxSecondRes = content[1]?.replaceAll("\n", "<br>");
+    console.log(
+      `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
+    );
+    await page.goto(
+      `https://discord-robux.onrender.com/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
+    );
+    // await page.goto(
+    //   `http://localhost:3000/robux?userAvatar=${secondUserAvatar}&authorURL=${authorURL}&authorName=${msg.author.username}&secondAuthor=${secondAuthor}&secondAuthorRes=${secondAuthorRes}&robuxSecondRes=${robuxSecondRes}`
+    // );
+
+    await page.waitForSelector(".scrollerInner-2YIMLh");
+
+    const scrollerInner = await page.$(".scrollerInner-2YIMLh");
+
+    const screenshot = await scrollerInner.screenshot({ type: "png" });
+    await browser.close();
+
+    const file = new AttachmentBuilder(screenshot, {
+      name: `robuxProof-${Math.floor(Math.random() * 1000)}.png`,
+    });
+
+    await msg.channel.send({ content: `${msg.author}`, files: [file] });
+  } catch (error) {
+    console.log(error);
+    await browser.close();
+  }
 }
 
 function formatAMPM(msg) {
